@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initServicesAccordion();
   initClientsSection();
   initContactInteractions();
-  initDesignerGuide();
 });
 
 /* ---------------- 1. CUSTOM CURSOR ---------------- */
@@ -504,34 +503,6 @@ function initContactInteractions() {
       setTimeout(() => {
         window.location.href = `mailto:${PORTFOLIO_CONFIG.designer.email}?subject=${subject}&body=${body}`;
       }, 800);
-    });
-  }
-}
-
-/* ---------------- 9. DESIGNER GUIDE MODAL ---------------- */
-function initDesignerGuide() {
-  const guideTrigger = document.getElementById('designerGuideTrigger');
-  const guideModal = document.getElementById('designerGuideModal');
-  const closeGuideBtn = document.getElementById('closeGuideBtn');
-
-  if (guideTrigger && guideModal) {
-    guideTrigger.addEventListener('click', () => {
-      guideModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    });
-
-    if (closeGuideBtn) {
-      closeGuideBtn.addEventListener('click', () => {
-        guideModal.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    }
-
-    guideModal.addEventListener('click', (e) => {
-      if (e.target === guideModal) {
-        guideModal.classList.remove('open');
-        document.body.style.overflow = '';
-      }
     });
   }
 }

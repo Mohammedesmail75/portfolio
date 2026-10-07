@@ -598,58 +598,6 @@
     </div>
   </div>
 
-  <!-- ================= FLOATING DESIGNER GUIDE BUTTON & MODAL ================= -->
-  <!-- A convenient tool for Mohammed to understand how to customize the site in 1 minute -->
-  <button class="designer-guide-trigger" id="designerGuideTrigger" title="Click for instructions on how to customize your projects & images">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-    <span>Designer Guide: How to Customize</span>
-  </button>
-
-  <div class="modal-overlay" id="designerGuideModal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="guide-modal-content">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
-        <div>
-          <span class="mono-tag" style="color: var(--accent-gold);">Customization Reference</span>
-          <h3 style="font-size: 1.5rem; margin-top: 0.2rem;">How to Update Your Portfolio</h3>
-        </div>
-        <button class="modal-icon-btn" id="closeGuideBtn" aria-label="Close guide">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <div class="guide-step-card">
-        <h4>1. Replacing Project Images</h4>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-          All visual artwork is stored in <code>assets/images/</code>. Simply drop your exported JPG, PNG, or WebP files into that folder and update the path in <code>js/projects-data.js</code>.
-        </p>
-      </div>
-
-      <div class="guide-step-card">
-        <h4>2. Adding or Editing Projects &amp; Case Studies</h4>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-          Open <code>js/projects-data.js</code>. Every project has clean fields: <code>title</code>, <code>category</code>, <code>year</code>, <code>shortDescription</code>, <code>deliverables</code>, <code>overview</code>, and <code>gallery</code>. When you replace a placeholder with your real project, change <code>isPlaceholder: true</code> to <code>false</code>!
-        </p>
-      </div>
-
-      <div class="guide-step-card">
-        <h4>3. Adding Your Real Clients &amp; Collaborations</h4>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-          In <code>js/projects-data.js</code> under <code>clientSlots</code>, replace the placeholder names with your real client or studio names!
-        </p>
-      </div>
-
-      <div class="guide-step-card">
-        <h4>4. Deploying to the Web</h4>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
-          This portfolio is built as a pure, lightning-fast static website. You can deploy it in seconds by dragging the folder into <strong>Netlify Drop</strong>, <strong>Vercel</strong>, or uploading to <strong>GitHub Pages</strong> with zero build configuration!
-        </p>
-      </div>
-
-      <button class="btn-primary" onclick="document.getElementById('designerGuideModal').classList.remove('open'); document.body.style.overflow='';" style="align-self: flex-start;">
-        <span>Got It &bull; Close Guide</span>
-      </button>
-    </div>
-  </div>
 
   <!-- Toast Container -->
   <div class="toast-notice" role="status" aria-live="polite"></div>

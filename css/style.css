@@ -547,6 +547,12 @@ img {
   overflow: visible;
 }
 
+@media (max-width: 640px) {
+  .hero-headline {
+    font-size: clamp(1.9rem, 8.2vw, 2.35rem);
+  }
+}
+
 .hero-headline .name-highlight {
   display: flex;
   flex-wrap: wrap;
@@ -2101,67 +2107,3 @@ img {
   pointer-events: auto;
 }
 
-/* ---------------- FLOATING GUIDE TOGGLE ---------------- */
-.designer-guide-trigger {
-  position: fixed;
-  bottom: 2rem;
-  left: 2rem;
-  z-index: 900;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.65rem 1.15rem;
-  background: rgba(18, 18, 24, 0.92);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-full);
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  color: var(--text-crimson-tint);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-  transition: all var(--transition-fast);
-}
-
-.designer-guide-trigger:hover {
-  border-color: var(--accent-crimson-border);
-  transform: translateY(-2px);
-  background: #20171a;
-  color: #fff;
-}
-
-/* Guide Modal */
-.guide-modal-content {
-  max-width: 750px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  color: var(--text-primary);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  max-height: 85vh;
-  overflow-y: auto;
-}
-
-.guide-step-card {
-  padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-}
-
-.guide-step-card h4 {
-  font-size: 1.05rem;
-  margin-bottom: 0.5rem;
-  color: var(--text-crimson-tint);
-}
-
-.guide-step-card code {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.2rem 0.4rem;
-  border-radius: 3px;
-  color: #fff;
-}
