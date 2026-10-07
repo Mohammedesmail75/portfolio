@@ -275,7 +275,89 @@ document.addEventListener('DOMContentLoaded', () => {
     savedLang = localStorage.getItem('portfolio_lang') || 'en';
   } catch (e) {}
   setLanguage(savedLang);
+
+  // Asynchronously load dynamic portfolio data from server / KV if available
+  loadDynamicPortfolioData();
 });
+
+async function loadDynamicPortfolioData() {
+  try {
+    const res = await fetch('/api/portfolio-data');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data === 'object') {
+        window.refreshPortfolioFromData(data);
+      }
+    }
+  } catch (err) {
+    // Graceful fallback to bundled config
+  }
+}
+
+window.applySectionVisibility = function(visibility) {
+  if (!visibility) return;
+  const sections = {
+    hero: { sel: '#hero', navHref: '#hero' },
+    work: { sel: '#work', navHref: '#work' },
+    about: { sel: '#about', navHref: '#about' },
+    services: { sel: '#services', navHref: '#services' },
+    contact: { sel: '#contact', navHref: '#contact' }
+  };
+  Object.entries(sections).forEach(([key, cfg]) => {
+    const isVisible = visibility[key] !== false;
+    const el = document.querySelector(cfg.sel);
+    if (el) el.style.display = isVisible ? '' : 'none';
+    if (cfg.navHref) {
+      document.querySelectorAll(`a[href="${cfg.navHref}"]`).forEach(link => {
+        const li = link.closest('li') || link;
+        li.style.display = isVisible ? '' : 'none';
+      });
+    }
+  });
+};
+
+window.refreshPortfolioFromData = function(data) {
+  if (!data || typeof data !== 'object') return;
+  if (data.designer && typeof PORTFOLIO_CONFIG !== 'undefined') {
+    Object.assign(PORTFOLIO_CONFIG.designer, data.designer);
+  }
+  if (Array.isArray(data.projects) && typeof PORTFOLIO_CONFIG !== 'undefined') {
+    PORTFOLIO_CONFIG.projects = data.projects;
+    filteredProjects = [...PORTFOLIO_CONFIG.projects];
+  }
+  if (Array.isArray(data.services) && typeof PORTFOLIO_CONFIG !== 'undefined') {
+    PORTFOLIO_CONFIG.services = data.services;
+  }
+  if (Array.isArray(data.categories) && typeof PORTFOLIO_CONFIG !== 'undefined') {
+    PORTFOLIO_CONFIG.categories = data.categories;
+  }
+  if (data.translations) {
+    if (data.translations.en) Object.assign(UI_TRANSLATIONS.en, data.translations.en);
+    if (data.translations.ar) Object.assign(UI_TRANSLATIONS.ar, data.translations.ar);
+  }
+  if (data.sectionVisibility) {
+    if (typeof PORTFOLIO_CONFIG !== 'undefined') PORTFOLIO_CONFIG.sectionVisibility = data.sectionVisibility;
+    window.applySectionVisibility(data.sectionVisibility);
+  }
+  if (data.heroSettings && data.heroSettings.videoUrl) {
+    const videoEl = document.querySelector('.hero-bg-video');
+    const sourceEl = videoEl ? videoEl.querySelector('source') : null;
+    if (sourceEl && sourceEl.getAttribute('src') !== data.heroSettings.videoUrl) {
+      sourceEl.setAttribute('src', data.heroSettings.videoUrl);
+      videoEl.load();
+    }
+  }
+
+  // Update counts and re-render
+  const allCountBadge = document.querySelector('.filter-btn[data-filter="all"] .count');
+  if (allCountBadge && PORTFOLIO_CONFIG.projects) {
+    allCountBadge.textContent = PORTFOLIO_CONFIG.projects.length;
+  }
+
+  renderProjectsGrid(filteredProjects);
+  renderServicesAccordion();
+  setLanguage(currentLang);
+};
 
 /* ================= 3. LANGUAGE SWITCHER & i18n ================= */
 function initLanguageSwitcher() {
