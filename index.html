@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +39,7 @@
   <header class="site-nav" id="topNav">
     <div class="container nav-inner">
       <div class="nav-brand">
-        <a href="#hero" class="brand-title">MOHAMMED ESMAIL</a>
+        <a href="#hero" class="brand-title" data-i18n="brand.name">MOHAMMED ESMAIL</a>
         <span class="brand-separator">/</span>
         <div class="cairo-live-badge" title="Live Local Time in Cairo">
           <span class="pulse-dot"></span>
@@ -49,16 +49,22 @@
 
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
-          <li><a href="#work" class="nav-link active">Work</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#clients" class="nav-link">Clients</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
+          <li><a href="#work" class="nav-link active" data-i18n="nav.work">Work</a></li>
+          <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
+          <li><a href="#services" class="nav-link" data-i18n="nav.services">Services</a></li>
+          <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </nav>
 
+      <!-- Language Switcher -->
+      <div class="lang-switcher" id="langSwitcher" role="group" aria-label="Language selection">
+        <button type="button" class="lang-btn active" data-lang="en" aria-label="English language">EN</button>
+        <span class="lang-separator">/</span>
+        <button type="button" class="lang-btn" data-lang="ar" aria-label="اللغة العربية">عربي</button>
+      </div>
+
       <a href="#contact" class="nav-cta-btn">
-        <span>Let's Talk</span>
+        <span data-i18n="nav.talk">Let's Talk</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
       </a>
 
@@ -73,13 +79,16 @@
   <!-- Mobile Menu Drawer -->
   <div class="mobile-drawer" aria-hidden="true">
     <ul class="mobile-drawer-links">
-      <li><a href="#work" class="mobile-drawer-link">Work</a></li>
-      <li><a href="#about" class="mobile-drawer-link">About</a></li>
-      <li><a href="#services" class="mobile-drawer-link">Services</a></li>
-      <li><a href="#clients" class="mobile-drawer-link">Clients</a></li>
-      <li><a href="#contact" class="mobile-drawer-link">Contact</a></li>
+      <li><a href="#work" class="mobile-drawer-link" data-i18n="nav.work">Work</a></li>
+      <li><a href="#about" class="mobile-drawer-link" data-i18n="nav.about">About</a></li>
+      <li><a href="#services" class="mobile-drawer-link" data-i18n="nav.services">Services</a></li>
+      <li><a href="#contact" class="mobile-drawer-link" data-i18n="nav.contact">Contact</a></li>
     </ul>
-    <div style="margin-top: 3rem; text-align: center;">
+    <div class="mobile-drawer-lang">
+      <button type="button" class="mobile-lang-btn active" data-lang="en">English</button>
+      <button type="button" class="mobile-lang-btn" data-lang="ar">العربية</button>
+    </div>
+    <div style="margin-top: 2rem; text-align: center;">
       <span class="mono-tag" id="heroCairoTime">Cairo, EG</span>
     </div>
   </div>
@@ -98,32 +107,32 @@
       <div class="container hero-content">
         
         <div class="hero-meta-badge">
-          <span class="location-tag">Cairo, Egypt</span>
+          <span class="location-tag" data-i18n="hero.location">Cairo, Egypt</span>
           <span class="dot-divider">•</span>
-          <span class="status-text">Available for select commissions</span>
+          <span class="status-text" data-i18n="hero.status">Available for select commissions</span>
         </div>
 
         <div class="hero-titles">
           <h1 class="hero-headline">
             <span class="name-highlight">
-              <span class="name-word">MOHAMMED</span>
-              <span class="name-word">ESMAIL</span>
+              <span class="name-word" data-i18n="hero.name1">MOHAMMED</span>
+              <span class="name-word" data-i18n="hero.name2">ESMAIL</span>
             </span>
-            <span class="hero-role-badge">Graphic Designer &amp; Visual Creative</span>
+            <span class="hero-role-badge" data-i18n="hero.role">Graphic Designer &amp; Visual Creative</span>
           </h1>
         </div>
 
-        <p class="hero-statement">
+        <p class="hero-statement" data-i18n="hero.statement">
           I turn ideas into <strong>visual identities</strong>, <strong>campaigns</strong>, and <strong>experiences</strong> that people remember.
         </p>
 
         <div class="hero-cta-group">
           <a href="#work" class="btn-primary">
-            <span>View Selected Work</span>
+            <span data-i18n="hero.viewWork">View Selected Work</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
           <a href="#contact" class="btn-secondary">
-            <span>Get in Touch</span>
+            <span data-i18n="hero.getInTouch">Get in Touch</span>
           </a>
         </div>
 
@@ -132,8 +141,8 @@
       <!-- Hero Marquee Ticker -->
       <div class="hero-marquee-wrap" aria-hidden="true">
         <div class="hero-marquee-track">
-          <div class="hero-marquee-item">BRANDING &amp; VISUAL IDENTITY <span class="spark">✦</span> SOCIAL MEDIA DESIGN <span class="spark">✦</span> ADVERTISING CAMPAIGNS <span class="spark">✦</span> POSTERS &amp; KEY VISUALS <span class="spark">✦</span> MUSIC &amp; ENTERTAINMENT <span class="spark">✦</span> PRODUCT &amp; PACKAGING <span class="spark">✦</span> AI-ASSISTED CREATIVE PRODUCTION <span class="spark">✦</span></div>
-          <div class="hero-marquee-item">BRANDING &amp; VISUAL IDENTITY <span class="spark">✦</span> SOCIAL MEDIA DESIGN <span class="spark">✦</span> ADVERTISING CAMPAIGNS <span class="spark">✦</span> POSTERS &amp; KEY VISUALS <span class="spark">✦</span> MUSIC &amp; ENTERTAINMENT <span class="spark">✦</span> PRODUCT &amp; PACKAGING <span class="spark">✦</span> AI-ASSISTED CREATIVE PRODUCTION <span class="spark">✦</span></div>
+          <div class="hero-marquee-item" data-i18n="hero.marquee">BRANDING &amp; VISUAL IDENTITY <span class="spark">✦</span> SOCIAL MEDIA DESIGN <span class="spark">✦</span> ADVERTISING CAMPAIGNS <span class="spark">✦</span> POSTERS &amp; KEY VISUALS <span class="spark">✦</span> MUSIC &amp; ENTERTAINMENT <span class="spark">✦</span> PRODUCT &amp; PACKAGING <span class="spark">✦</span> AI-ASSISTED CREATIVE PRODUCTION <span class="spark">✦</span></div>
+          <div class="hero-marquee-item" data-i18n="hero.marquee">BRANDING &amp; VISUAL IDENTITY <span class="spark">✦</span> SOCIAL MEDIA DESIGN <span class="spark">✦</span> ADVERTISING CAMPAIGNS <span class="spark">✦</span> POSTERS &amp; KEY VISUALS <span class="spark">✦</span> MUSIC &amp; ENTERTAINMENT <span class="spark">✦</span> PRODUCT &amp; PACKAGING <span class="spark">✦</span> AI-ASSISTED CREATIVE PRODUCTION <span class="spark">✦</span></div>
         </div>
       </div>
     </section>
@@ -144,24 +153,24 @@
         
         <div class="section-header with-actions">
           <div>
-            <span class="section-eyebrow">Portfolio</span>
-            <h2 class="section-title">Selected Work</h2>
+            <span class="section-eyebrow" data-i18n="work.eyebrow">Portfolio</span>
+            <h2 class="section-title" data-i18n="work.title">Selected Work</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-desc" data-i18n="work.desc">
             A curated selection of visual identities, editorial key visuals, album art, and campaigns built with artistic rigor and modern workflows.
           </p>
         </div>
 
         <!-- Discipline Filter Tabs -->
         <div class="work-filter-bar" role="tablist" aria-label="Project category filters">
-          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Works <span class="count">8</span></button>
-          <button class="filter-btn" data-filter="branding" role="tab" aria-selected="false">Branding</button>
-          <button class="filter-btn" data-filter="campaigns" role="tab" aria-selected="false">Advertising</button>
-          <button class="filter-btn" data-filter="posters" role="tab" aria-selected="false">Posters &amp; Key Visuals</button>
-          <button class="filter-btn" data-filter="music" role="tab" aria-selected="false">Music &amp; Entertainment</button>
-          <button class="filter-btn" data-filter="packaging" role="tab" aria-selected="false">Packaging</button>
-          <button class="filter-btn" data-filter="social" role="tab" aria-selected="false">Social Media</button>
-          <button class="filter-btn" data-filter="ai" role="tab" aria-selected="false">AI Creative</button>
+          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true"><span class="filter-label" data-i18n="filters.all">All Works</span> <span class="count">8</span></button>
+          <button class="filter-btn" data-filter="branding" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.branding">Branding</span></button>
+          <button class="filter-btn" data-filter="campaigns" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.campaigns">Advertising</span></button>
+          <button class="filter-btn" data-filter="posters" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.posters">Posters &amp; Key Visuals</span></button>
+          <button class="filter-btn" data-filter="music" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.music">Music &amp; Entertainment</span></button>
+          <button class="filter-btn" data-filter="packaging" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.packaging">Packaging</span></button>
+          <button class="filter-btn" data-filter="social" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.social">Social Media</span></button>
+          <button class="filter-btn" data-filter="ai" role="tab" aria-selected="false"><span class="filter-label" data-i18n="filters.ai">AI Creative</span></button>
         </div>
 
         <!-- Asymmetric Editorial Projects Grid -->
@@ -179,16 +188,16 @@
         <div class="about-grid">
           
           <div class="about-narrative">
-            <span class="section-eyebrow">About the Designer</span>
-            <h2 class="about-lead-quote">
+            <span class="section-eyebrow" data-i18n="about.eyebrow">About the Designer</span>
+            <h2 class="about-lead-quote" data-i18n="about.leadQuote">
               "Design is the visual architecture of emotion, identity, and memory."
             </h2>
             
-            <p class="about-body-text">
+            <p class="about-body-text" data-i18n="about.body1">
               Based in Cairo, Egypt, I am a graphic designer and visual creative working at the intersection of visual storytelling, branding, advertising, music, entertainment, and modern AI-assisted workflows.
             </p>
             
-            <p class="about-body-text">
+            <p class="about-body-text" data-i18n="about.body2">
               My approach avoids generic formulas. Instead, I create holistic visual worlds — whether shaping the timeless identity for an emerging brand, directing cinematic key visuals for music releases, crafting tactile packaging, or synthesizing impossible visual aesthetics through human-guided AI production.
             </p>
 
@@ -196,24 +205,24 @@
               <div class="pillar-item">
                 <span class="pillar-num">01</span>
                 <div class="pillar-content">
-                  <h4>Visual Storytelling &amp; Cultural Depth</h4>
-                  <p>Rooted in contextual narrative and human resonance, creating work that connects with people on an emotional level.</p>
+                  <h4 data-i18n="about.p1Title">Visual Storytelling &amp; Cultural Depth</h4>
+                  <p data-i18n="about.p1Desc">Rooted in contextual narrative and human resonance, creating work that connects with people on an emotional level.</p>
                 </div>
               </div>
 
               <div class="pillar-item">
                 <span class="pillar-num">02</span>
                 <div class="pillar-content">
-                  <h4>Obsessive Art Direction &amp; Craft</h4>
-                  <p>Disciplined typography, deliberate negative space, and harmonious color architecture engineered for maximum visual impact.</p>
+                  <h4 data-i18n="about.p2Title">Obsessive Art Direction &amp; Craft</h4>
+                  <p data-i18n="about.p2Desc">Disciplined typography, deliberate negative space, and harmonious color architecture engineered for maximum visual impact.</p>
                 </div>
               </div>
 
               <div class="pillar-item">
                 <span class="pillar-num">03</span>
                 <div class="pillar-content">
-                  <h4>Modern AI-Assisted Workflows</h4>
-                  <p>Augmenting classical design fundamentals with state-of-the-art generative tools for rapid conceptual exploration and bespoke creative production.</p>
+                  <h4 data-i18n="about.p3Title">Modern AI-Assisted Workflows</h4>
+                  <p data-i18n="about.p3Desc">Augmenting classical design fundamentals with state-of-the-art generative tools for rapid conceptual exploration and bespoke creative production.</p>
                 </div>
               </div>
             </div>
@@ -224,31 +233,31 @@
             <div class="profile-card-header">
               <div class="profile-avatar-monogram">ME</div>
               <div class="profile-title-col">
-                <h3>Mohammed Esmail</h3>
-                <span>Graphic Designer / Art Director</span>
+                <h3 data-i18n="about.sidebarName">Mohammed Esmail</h3>
+                <span data-i18n="about.sidebarRole">Graphic Designer / Art Director</span>
               </div>
             </div>
 
-            <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+            <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;" data-i18n="about.sidebarBio">
               Partnering with forward-thinking brands, musicians, and studios looking for elevated visual identities and memorable campaigns.
             </p>
 
             <div class="sidebar-data-list">
               <div class="data-row">
-                <span class="label">Location</span>
-                <span class="val">Cairo, Egypt</span>
+                <span class="label" data-i18n="about.locLabel">Location</span>
+                <span class="val" data-i18n="about.locVal">Cairo, Egypt</span>
               </div>
               <div class="data-row">
-                <span class="label">Primary Focus</span>
-                <span class="val">Brand Identity &amp; Key Visuals</span>
+                <span class="label" data-i18n="about.focusLabel">Primary Focus</span>
+                <span class="val" data-i18n="about.focusVal">Brand Identity &amp; Key Visuals</span>
               </div>
               <div class="data-row">
-                <span class="label">Creative Pipeline</span>
-                <span class="val">Concept → 3D / AI → Finish</span>
+                <span class="label" data-i18n="about.pipelineLabel">Creative Pipeline</span>
+                <span class="val" data-i18n="about.pipelineVal">Concept → 3D / AI → Finish</span>
               </div>
               <div class="data-row">
-                <span class="label">Status</span>
-                <span class="val" style="color: var(--accent-gold);">Open for Commissions</span>
+                <span class="label" data-i18n="about.statusLabel">Status</span>
+                <span class="val" style="color: var(--accent-gold);" data-i18n="about.statusVal">Open for Commissions</span>
               </div>
             </div>
 
@@ -270,8 +279,8 @@
         <!-- Software & Creative Production Tools -->
         <div class="software-tools-section">
           <div class="software-section-header">
-            <span class="section-eyebrow">Creative Suite</span>
-            <h3 class="software-section-title">Design Software &amp; Production Tools</h3>
+            <span class="section-eyebrow" data-i18n="software.eyebrow">Creative Suite</span>
+            <h3 class="software-section-title" data-i18n="software.title">Design Software &amp; Production Tools</h3>
           </div>
 
           <div class="software-tools-grid">
@@ -285,7 +294,7 @@
               </div>
               <div class="software-tool-details">
                 <h4 class="software-tool-name">Adobe Photoshop</h4>
-                <p class="software-tool-desc">Key Visuals &bull; Image Craft &bull; Compositing</p>
+                <p class="software-tool-desc" data-i18n="software.psDesc">Key Visuals &bull; Image Craft &bull; Compositing</p>
               </div>
             </div>
 
@@ -299,7 +308,7 @@
               </div>
               <div class="software-tool-details">
                 <h4 class="software-tool-name">Adobe Illustrator</h4>
-                <p class="software-tool-desc">Vector Systems &bull; Brand Identity &bull; Typography</p>
+                <p class="software-tool-desc" data-i18n="software.aiDesc">Vector Systems &bull; Brand Identity &bull; Typography</p>
               </div>
             </div>
 
@@ -313,7 +322,7 @@
               </div>
               <div class="software-tool-details">
                 <h4 class="software-tool-name">Adobe Premiere Pro</h4>
-                <p class="software-tool-desc">Video Editing &bull; Motion Grading &bull; Visual Rhythm</p>
+                <p class="software-tool-desc" data-i18n="software.prDesc">Video Editing &bull; Motion Grading &bull; Visual Rhythm</p>
               </div>
             </div>
           </div>
@@ -328,10 +337,10 @@
         
         <div class="section-header with-actions">
           <div>
-            <span class="section-eyebrow">Disciplines &amp; Offerings</span>
-            <h2 class="section-title">Creative Services</h2>
+            <span class="section-eyebrow" data-i18n="services.eyebrow">Disciplines &amp; Offerings</span>
+            <h2 class="section-title" data-i18n="services.title">Creative Services</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-desc" data-i18n="services.desc">
             End-to-end visual solutions crafted with editorial precision, from strategic brand foundation to high-concept creative execution.
           </p>
         </div>
@@ -344,49 +353,18 @@
       </div>
     </section>
 
-    <!-- ================= 5. EXPERIENCE / CLIENTS SECTION ================= -->
-    <section class="section-padding" id="clients" style="background: rgba(14, 14, 18, 0.4); border-top: 1px solid var(--border-subtle); border-bottom: 1px solid var(--border-subtle);">
-      <div class="container">
-        
-        <div class="section-header">
-          <span class="section-eyebrow">Collaborations</span>
-          <h2 class="section-title">Clients &amp; Collaborations</h2>
-          <p class="section-desc">
-            Open for selective commissions with ambitious brands, independent music artists, creative studios, and founders in Cairo and worldwide.
-          </p>
-        </div>
-
-        <!-- Client Slots Grid (Configurable via projects-data.js) -->
-        <div class="clients-grid" id="clientsGrid">
-          <!-- Injected dynamically with clear labels for Mohammed -->
-        </div>
-
-        <div class="collaborations-banner">
-          <div class="collaborations-text">
-            <h4>Ready to collaborate on your next release or brand launch?</h4>
-            <p>Every collaboration begins with deep creative alignment and visual concept exploration.</p>
-          </div>
-          <a href="#contact" class="btn-primary">
-            <span>Inquire for Collaboration</span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ================= 6. CONTACT SECTION ================= -->
+    <!-- ================= 5. CONTACT SECTION ================= -->
     <section class="section-padding contact-section" id="contact">
       <div class="container">
         
         <div class="contact-card-wrapper">
           
           <div class="contact-header-content">
-            <span class="section-eyebrow">Get in Touch</span>
-            <h2 class="contact-headline">
+            <span class="section-eyebrow" data-i18n="contact.eyebrow">Get in Touch</span>
+            <h2 class="contact-headline" data-i18n="contact.headline">
               "Have an idea? Let's create something memorable."
             </h2>
-            <p class="section-desc">
+            <p class="section-desc" data-i18n="contact.desc">
               Whether you are launching a new brand, preparing an advertising campaign, releasing a musical project, or exploring AI-assisted art direction, feel free to reach out.
             </p>
           </div>
@@ -399,36 +377,36 @@
               <!-- Direct Email Card with One-Click Copy -->
               <div class="direct-email-card">
                 <div>
-                  <span class="mono-tag" style="display: block; margin-bottom: 0.35rem;">Direct Inquiry</span>
+                  <span class="mono-tag" style="display: block; margin-bottom: 0.35rem;" data-i18n="contact.inquiryTag">Direct Inquiry</span>
                   <a href="mailto:Mohammedesmailofficial@gmail.com" class="email-address-text" id="emailAddressLink">
                     Mohammedesmailofficial@gmail.com
                   </a>
                 </div>
                 <button class="copy-email-btn" id="copyEmailBtn" aria-label="Copy email address to clipboard">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  <span>Copy</span>
+                  <span data-i18n="contact.copy">Copy</span>
                 </button>
               </div>
 
-              <!-- Official Social Channels (As specified by user) -->
+              <!-- Official Social Channels -->
               <div class="social-platforms-grid">
                 
                 <a href="https://www.behance.net/muhammedesmail" target="_blank" rel="noopener noreferrer" class="social-card">
                   <div class="social-card-top">
-                    <span class="mono-tag">Portfolio &amp; Case Studies</span>
+                    <span class="mono-tag" data-i18n="contact.behanceTag">Portfolio &amp; Case Studies</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                   </div>
                   <h3 class="social-card-title">Behance</h3>
-                  <p class="social-card-desc">Detailed design presentations, brand guidelines, and visual explorations.</p>
+                  <p class="social-card-desc" data-i18n="contact.behanceDesc">Detailed design presentations, brand guidelines, and visual explorations.</p>
                 </a>
 
                 <a href="https://www.youtube.com/@MohammedEsmailOfficial/" target="_blank" rel="noopener noreferrer" class="social-card">
                   <div class="social-card-top">
-                    <span class="mono-tag">Creative Channel</span>
+                    <span class="mono-tag" data-i18n="contact.youtubeTag">Creative Channel</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
                   </div>
                   <h3 class="social-card-title">YouTube</h3>
-                  <p class="social-card-desc">Visual design breakdowns, creative tutorials, and process videos.</p>
+                  <p class="social-card-desc" data-i18n="contact.youtubeDesc">Visual design breakdowns, creative tutorials, and process videos.</p>
                 </a>
 
               </div>
@@ -436,12 +414,12 @@
               <!-- Location & Timezone Details -->
               <div style="padding: 1.5rem 1.75rem; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                  <span class="mono-tag">Studio Base</span>
-                  <div style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;">Cairo, Egypt (UTC+2)</div>
+                  <span class="mono-tag" data-i18n="contact.studioBase">Studio Base</span>
+                  <div style="font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-top: 0.2rem;" data-i18n="contact.studioLoc">Cairo, Egypt (UTC+2)</div>
                 </div>
                 <div style="text-align: right;">
-                  <span class="mono-tag">Availability</span>
-                  <div style="font-size: 0.9rem; color: var(--accent-gold); margin-top: 0.2rem;">Taking commissions for Q4</div>
+                  <span class="mono-tag" data-i18n="contact.availTag">Availability</span>
+                  <div style="font-size: 0.9rem; color: var(--accent-gold); margin-top: 0.2rem;" data-i18n="contact.availVal">Taking commissions for Q4</div>
                 </div>
               </div>
 
@@ -449,41 +427,41 @@
 
             <!-- Quick Inquiry Form -->
             <div class="inquiry-form-card">
-              <h3 class="inquiry-form-title">Send a Direct Message</h3>
-              <p class="inquiry-form-subtitle">Fill in your brief to start a conversation.</p>
+              <h3 class="inquiry-form-title" data-i18n="contact.formTitle">Send a Direct Message</h3>
+              <p class="inquiry-form-subtitle" data-i18n="contact.formSubtitle">Fill in your brief to start a conversation.</p>
               
               <form id="inquiryForm">
                 <div class="form-group">
-                  <label for="inquiryName" class="form-label">Your Name</label>
+                  <label for="inquiryName" class="form-label" data-i18n="contact.labelName">Your Name</label>
                   <input type="text" id="inquiryName" class="form-input" placeholder="e.g. Alex Morgan" required />
                 </div>
 
                 <div class="form-group">
-                  <label for="inquiryEmail" class="form-label">Email Address</label>
+                  <label for="inquiryEmail" class="form-label" data-i18n="contact.labelEmail">Email Address</label>
                   <input type="email" id="inquiryEmail" class="form-input" placeholder="alex@studio.com" required />
                 </div>
 
                 <div class="form-group">
-                  <label for="inquiryService" class="form-label">Area of Interest</label>
+                  <label for="inquiryService" class="form-label" data-i18n="contact.labelService">Area of Interest</label>
                   <select id="inquiryService" class="form-select">
-                    <option value="Brand Identity">Brand Identity</option>
-                    <option value="Art Direction">Art Direction</option>
-                    <option value="Social Media Design">Social Media Design</option>
-                    <option value="Advertising & Campaigns">Advertising &amp; Campaigns</option>
-                    <option value="Packaging Design">Packaging Design</option>
-                    <option value="Music & Entertainment Visuals">Music &amp; Entertainment Visuals</option>
-                    <option value="AI Creative Production">AI Creative Production</option>
-                    <option value="Other / Multi-Disciplinary">Other / Multi-Disciplinary</option>
+                    <option value="Brand Identity" data-i18n="contact.serviceOption0">Brand Identity</option>
+                    <option value="Art Direction" data-i18n="contact.serviceOption1">Art Direction</option>
+                    <option value="Social Media Design" data-i18n="contact.serviceOption2">Social Media Design</option>
+                    <option value="Advertising & Campaigns" data-i18n="contact.serviceOption3">Advertising &amp; Campaigns</option>
+                    <option value="Packaging Design" data-i18n="contact.serviceOption4">Packaging Design</option>
+                    <option value="Music & Entertainment Visuals" data-i18n="contact.serviceOption5">Music &amp; Entertainment Visuals</option>
+                    <option value="AI Creative Production" data-i18n="contact.serviceOption6">AI Creative Production</option>
+                    <option value="Other / Multi-Disciplinary" data-i18n="contact.serviceOption7">Other / Multi-Disciplinary</option>
                   </select>
                 </div>
 
                 <div class="form-group">
-                  <label for="inquiryMessage" class="form-label">Project Overview</label>
+                  <label for="inquiryMessage" class="form-label" data-i18n="contact.labelMsg">Project Overview</label>
                   <textarea id="inquiryMessage" class="form-textarea" placeholder="Tell me about your project, timeline, and goals..." required></textarea>
                 </div>
 
                 <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
-                  <span>Submit Inquiry</span>
+                  <span data-i18n="contact.submitBtn">Submit Inquiry</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
               </form>
@@ -501,15 +479,16 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-copy">
-        <p>&copy; <span id="currentYear">2026</span> Mohammed Esmail. All rights reserved.</p>
-        <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.25rem;">Cairo, Egypt &bull; 30.0444&deg; N, 31.2357&deg; E</p>
+        <p>&copy; <span id="currentYear">2026</span> Mohammed Esmail. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.25rem;" data-i18n="footer.location">Cairo, Egypt &bull; 30.0444&deg; N, 31.2357&deg; E</p>
       </div>
 
       <ul class="footer-links">
+        <li><button type="button" class="footer-lang-toggle" id="footerLangBtn" data-lang-target="ar">العربية</button></li>
         <li><a href="https://www.behance.net/muhammedesmail" target="_blank" rel="noopener noreferrer" class="footer-link">Behance</a></li>
         <li><a href="https://www.youtube.com/@MohammedEsmailOfficial/" target="_blank" rel="noopener noreferrer" class="footer-link">YouTube</a></li>
         <li><a href="#hero" class="back-to-top-btn" id="backToTopBtn">
-          <span>Back to Top</span>
+          <span data-i18n="footer.backToTop">Back to Top</span>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
         </a></li>
       </ul>
@@ -544,12 +523,6 @@
       <!-- Scrollable Modal Body -->
       <div class="modal-scroll-body">
         
-        <!-- Placeholder Banner Note for Mohammed -->
-        <div id="modalPlaceholderBanner" style="display: none; align-items: center; gap: 0.75rem; padding: 0.85rem 1.25rem; background: rgba(200, 170, 122, 0.08); border: 1px solid var(--border-gold); border-radius: var(--radius-md);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <span style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--accent-gold-light);" id="modalPlaceholderText"></span>
-        </div>
-
         <!-- Hero Artwork -->
         <div class="modal-hero-artwork">
           <img src="" alt="" id="modalHeroImg" />
@@ -558,19 +531,19 @@
         <!-- Project Metadata Grid -->
         <div class="modal-meta-grid">
           <div class="modal-meta-item">
-            <span class="modal-meta-label">Commission / Client</span>
+            <span class="modal-meta-label" data-i18n="modal.client">Commission / Client</span>
             <span class="modal-meta-val" id="modalClient">[Client Placeholder]</span>
           </div>
           <div class="modal-meta-item">
-            <span class="modal-meta-label">Year</span>
+            <span class="modal-meta-label" data-i18n="modal.year">Year</span>
             <span class="modal-meta-val" id="modalYear">2024</span>
           </div>
           <div class="modal-meta-item">
-            <span class="modal-meta-label">Role</span>
+            <span class="modal-meta-label" data-i18n="modal.role">Role</span>
             <span class="modal-meta-val" id="modalRole">Lead Visual Designer</span>
           </div>
           <div class="modal-meta-item">
-            <span class="modal-meta-label">Scope &amp; Deliverables</span>
+            <span class="modal-meta-label" data-i18n="modal.scope">Scope &amp; Deliverables</span>
             <div class="deliverables-pill-list" id="modalDeliverablesList"></div>
           </div>
         </div>
@@ -578,18 +551,18 @@
         <!-- Story & Direction Block -->
         <div class="modal-story-section">
           <div class="modal-story-block">
-            <h4>Overview &amp; Concept</h4>
+            <h4 data-i18n="modal.overviewTitle">Overview &amp; Concept</h4>
             <p id="modalOverviewText"></p>
           </div>
           <div class="modal-story-block">
-            <h4>Creative Direction &amp; Craft</h4>
+            <h4 data-i18n="modal.directionTitle">Creative Direction &amp; Craft</h4>
             <p id="modalDirectionText"></p>
           </div>
         </div>
 
         <!-- Visual Multi-View Showcase -->
         <div class="modal-gallery-showcase">
-          <h4 style="font-size: 1.2rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">Visual Showcase &amp; Deliverables</h4>
+          <h4 style="font-size: 1.2rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);" data-i18n="modal.showcaseTitle">Visual Showcase &amp; Deliverables</h4>
           <div id="modalGalleryShowcase" style="display: flex; flex-direction: column; gap: 2rem;"></div>
         </div>
 
@@ -597,7 +570,6 @@
 
     </div>
   </div>
-
 
   <!-- Toast Container -->
   <div class="toast-notice" role="status" aria-live="polite"></div>

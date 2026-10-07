@@ -1,33 +1,398 @@
 /**
  * MOHAMMED ESMAIL — PORTFOLIO CORE SCRIPTS
- * Interactive behaviors, filtering, modal case-study viewer,
- * Cairo timezone clock, smooth animations, and copy handlers.
+ * Interactive behaviors, bilingual language switching (EN/AR),
+ * modal case-study viewer, Cairo timezone clock, smooth animations, and forms.
  */
 
+let currentLang = 'en';
+let currentActiveProjectIndex = 0;
+let filteredProjects = [];
+
+/* ================= 1. UI TRANSLATIONS DICTIONARY ================= */
+const UI_TRANSLATIONS = {
+  en: {
+    // Nav
+    "brand.name": "MOHAMMED ESMAIL",
+    "nav.work": "Work",
+    "nav.about": "About",
+    "nav.services": "Services",
+    "nav.contact": "Contact",
+    "nav.talk": "Let's Talk",
+
+    // Hero
+    "hero.location": "Cairo, Egypt",
+    "hero.status": "Available for select commissions",
+    "hero.name1": "MOHAMMED",
+    "hero.name2": "ESMAIL",
+    "hero.role": "Graphic Designer & Visual Creative",
+    "hero.statement": "I turn ideas into <strong>visual identities</strong>, <strong>campaigns</strong>, and <strong>experiences</strong> that people remember.",
+    "hero.viewWork": "View Selected Work",
+    "hero.getInTouch": "Get in Touch",
+    "hero.marquee": "BRANDING &amp; VISUAL IDENTITY <span class=\"spark\">✦</span> SOCIAL MEDIA DESIGN <span class=\"spark\">✦</span> ADVERTISING CAMPAIGNS <span class=\"spark\">✦</span> POSTERS &amp; KEY VISUALS <span class=\"spark\">✦</span> MUSIC &amp; ENTERTAINMENT <span class=\"spark\">✦</span> PRODUCT &amp; PACKAGING <span class=\"spark\">✦</span> AI-ASSISTED CREATIVE PRODUCTION <span class=\"spark\">✦</span>",
+
+    // Work
+    "work.eyebrow": "Portfolio",
+    "work.title": "Selected Work",
+    "work.desc": "A curated selection of visual identities, editorial key visuals, album art, and campaigns built with artistic rigor and modern workflows.",
+    "filters.all": "All Works",
+    "filters.branding": "Branding",
+    "filters.campaigns": "Advertising",
+    "filters.posters": "Posters & Key Visuals",
+    "filters.music": "Music & Entertainment",
+    "filters.packaging": "Packaging",
+    "filters.social": "Social Media",
+    "filters.ai": "AI Creative",
+    "work.noProjects": "No projects found in this discipline category.",
+    "work.viewBehance": "View on Behance",
+
+    // About
+    "about.eyebrow": "About the Designer",
+    "about.leadQuote": "\"Design is the visual architecture of emotion, identity, and memory.\"",
+    "about.body1": "Based in Cairo, Egypt, I am a graphic designer and visual creative working at the intersection of visual storytelling, branding, advertising, music, entertainment, and modern AI-assisted workflows.",
+    "about.body2": "My approach avoids generic formulas. Instead, I create holistic visual worlds — whether shaping the timeless identity for an emerging brand, directing cinematic key visuals for music releases, crafting tactile packaging, or synthesizing impossible visual aesthetics through human-guided AI production.",
+    "about.p1Title": "Visual Storytelling & Cultural Depth",
+    "about.p1Desc": "Rooted in contextual narrative and human resonance, creating work that connects with people on an emotional level.",
+    "about.p2Title": "Obsessive Art Direction & Craft",
+    "about.p2Desc": "Disciplined typography, deliberate negative space, and harmonious color architecture engineered for maximum visual impact.",
+    "about.p3Title": "Modern AI-Assisted Workflows",
+    "about.p3Desc": "Augmenting classical design fundamentals with state-of-the-art generative tools for rapid conceptual exploration and bespoke creative production.",
+
+    // Sidebar
+    "about.sidebarName": "Mohammed Esmail",
+    "about.sidebarRole": "Graphic Designer / Art Director",
+    "about.sidebarBio": "Partnering with forward-thinking brands, musicians, and studios looking for elevated visual identities and memorable campaigns.",
+    "about.locLabel": "Location",
+    "about.locVal": "Cairo, Egypt",
+    "about.focusLabel": "Primary Focus",
+    "about.focusVal": "Brand Identity & Key Visuals",
+    "about.pipelineLabel": "Creative Pipeline",
+    "about.pipelineVal": "Concept → 3D / AI → Finish",
+    "about.statusLabel": "Status",
+    "about.statusVal": "Open for Commissions",
+
+    // Software
+    "software.eyebrow": "Creative Suite",
+    "software.title": "Design Software & Production Tools",
+    "software.psDesc": "Key Visuals • Image Craft • Compositing",
+    "software.aiDesc": "Vector Systems • Brand Identity • Typography",
+    "software.prDesc": "Video Editing • Motion Grading • Visual Rhythm",
+
+    // Services
+    "services.eyebrow": "Disciplines & Offerings",
+    "services.title": "Creative Services",
+    "services.desc": "End-to-end visual solutions crafted with editorial precision, from strategic brand foundation to high-concept creative execution.",
+    "services.scopeTitle": "Scope & Deliverables:",
+
+    // Contact
+    "contact.eyebrow": "Get in Touch",
+    "contact.headline": "\"Have an idea? Let's create something memorable.\"",
+    "contact.desc": "Whether you are launching a new brand, preparing an advertising campaign, releasing a musical project, or exploring AI-assisted art direction, feel free to reach out.",
+    "contact.inquiryTag": "Direct Inquiry",
+    "contact.copy": "Copy",
+    "contact.behanceTag": "Portfolio & Case Studies",
+    "contact.behanceDesc": "Detailed design presentations, brand guidelines, and visual explorations.",
+    "contact.youtubeTag": "Creative Channel",
+    "contact.youtubeDesc": "Visual design breakdowns, creative tutorials, and process videos.",
+    "contact.studioBase": "Studio Base",
+    "contact.studioLoc": "Cairo, Egypt (UTC+2)",
+    "contact.availTag": "Availability",
+    "contact.availVal": "Taking commissions for Q4",
+    "contact.formTitle": "Send a Direct Message",
+    "contact.formSubtitle": "Fill in your brief to start a conversation.",
+    "contact.labelName": "Your Name",
+    "contact.placeholderName": "e.g. Alex Morgan",
+    "contact.labelEmail": "Email Address",
+    "contact.placeholderEmail": "alex@studio.com",
+    "contact.labelService": "Area of Interest",
+    "contact.serviceOption0": "Brand Identity",
+    "contact.serviceOption1": "Art Direction",
+    "contact.serviceOption2": "Social Media Design",
+    "contact.serviceOption3": "Advertising & Campaigns",
+    "contact.serviceOption4": "Packaging Design",
+    "contact.serviceOption5": "Music & Entertainment Visuals",
+    "contact.serviceOption6": "AI Creative Production",
+    "contact.serviceOption7": "Other / Multi-Disciplinary",
+    "contact.labelMsg": "Project Overview",
+    "contact.placeholderMsg": "Tell me about your project, timeline, and goals...",
+    "contact.submitBtn": "Submit Inquiry",
+    "contact.toastFill": "Please fill in your name, email, and message.",
+    "contact.toastSuccess": "Thank you! Inquiry prepared. Opening your email client...",
+    "contact.toastCopied": "Copied to clipboard:",
+
+    // Footer
+    "footer.rights": "All rights reserved.",
+    "footer.location": "Cairo, Egypt • 30.0444° N, 31.2357° E",
+    "footer.backToTop": "Back to Top",
+
+    // Modal
+    "modal.client": "Commission / Client",
+    "modal.year": "Year",
+    "modal.role": "Role",
+    "modal.scope": "Scope & Deliverables",
+    "modal.overviewTitle": "Overview & Concept",
+    "modal.directionTitle": "Creative Direction & Craft",
+    "modal.showcaseTitle": "Visual Showcase & Deliverables"
+  },
+  ar: {
+    // Nav
+    "brand.name": "محمد إسماعيل",
+    "nav.work": "الأعمال",
+    "nav.about": "نبذة عني",
+    "nav.services": "الخدمات",
+    "nav.contact": "تواصل معي",
+    "nav.talk": "تواصل الآن",
+
+    // Hero
+    "hero.location": "القاهرة، مصر",
+    "hero.status": "متاح لمشاريع مختارة وإدارة فنية",
+    "hero.name1": "محمد",
+    "hero.name2": "إسماعيل",
+    "hero.role": "مصمم جرافيك ومبدع بصري",
+    "hero.statement": "أحوّل الأفكار إلى <strong>هويات بصرية</strong>، و<strong>حملات</strong>، و<strong>تجارب</strong> تخلد في الذاكرة.",
+    "hero.viewWork": "استعرض الأعمال المختارة",
+    "hero.getInTouch": "تواصل معي",
+    "hero.marquee": "الهوية البصرية والشعارات <span class=\"spark\">✦</span> تصميم منصات التواصل <span class=\"spark\">✦</span> الإعلانات والحملات <span class=\"spark\">✦</span> الملصقات والمفاتيح البصرية <span class=\"spark\">✦</span> الموسيقى والترفيه <span class=\"spark\">✦</span> تصميم العبوات والتغليف <span class=\"spark\">✦</span> الإنتاج الإبداعي بالذكاء الاصطناعي <span class=\"spark\">✦</span>",
+
+    // Work
+    "work.eyebrow": "معرض الأعمال",
+    "work.title": "أعمال مختارة",
+    "work.desc": "مجموعة منتقاة من الهويات البصرية، والمفاتيح التحريرية، وأغلفة الألبومات، والحملات الإعلانية المنفذة بحرفية فنية وأساليب معاصرة.",
+    "filters.all": "جميع الأعمال",
+    "filters.branding": "الهوية البصرية",
+    "filters.campaigns": "الإعلانات والحملات",
+    "filters.posters": "الملصقات والمفاتيح البصرية",
+    "filters.music": "الموسيقى والترفيه",
+    "filters.packaging": "تصميم العبوات",
+    "filters.social": "منصات التواصل",
+    "filters.ai": "الذكاء الاصطناعي",
+    "work.noProjects": "لا توجد مشاريع في هذا التخصص حالياً.",
+    "work.viewBehance": "عرض على Behance",
+
+    // About
+    "about.eyebrow": "نبذة عن المصمم",
+    "about.leadQuote": "«التصميم هو الهندسة البصرية للمشاعر والهوية والذاكرة.»",
+    "about.body1": "أعمل من القاهرة كمصمم جرافيك ومبدع بصري، حيث أجمع بين السرد القصصي البصري، وبناء الهويات، والإعلانات، والموسيقى والترفيه، وتطبيقات الذكاء الاصطناعي الحديثة.",
+    "about.body2": "أبتعد في عملي عن القوالب المكررة، وأركز على خلق عوالم بصرية متكاملة؛ سواء كان ذلك بتأسيس هوية خالدة لعلامة تجارية ناشئة، أو توجيه مفاتيح بصرية سينمائية للأعمال الموسيقية، أو تصميم عبوات ملموسة، أو توليد جماليات بصرية متقدمة بتوجيه فني بشري دقيق.",
+    "about.p1Title": "السرد البصري والعمق الثقافي",
+    "about.p1Desc": "أعمال متجذرة في السياق القصصي والتأثير الإنساني للتواصل مع الجمهور على مستوى شعوري عميق.",
+    "about.p2Title": "شغف الإدارة الفنية والحِرفة",
+    "about.p2Desc": "انضباط في هندسة الخطوط، وتوظيف المساحات السلبية، وتناغم الألوان لتحقيق أقصى تأثير بصري.",
+    "about.p3Title": "أساليب عمل حديثة بالذكاء الاصطناعي",
+    "about.p3Desc": "تعزيز أساسيات التصميم الأصيلة بأحدث الأدوات التوليدية لاستكشاف المفاهيم بسرعة وابتكار حلول إبداعية مخصصة.",
+
+    // Sidebar
+    "about.sidebarName": "محمد إسماعيل",
+    "about.sidebarRole": "مصمم جرافيك / مدير فني",
+    "about.sidebarBio": "أتعاون مع العلامات التجارية الطموحة، والموسيقيين، والاستوديوهات الباحثة عن هويات بصرية راقية وحملات لا تُنسى.",
+    "about.locLabel": "المقر",
+    "about.locVal": "القاهرة، مصر",
+    "about.focusLabel": "التخصص الرئيسي",
+    "about.focusVal": "الهوية البصرية والمفاتيح الفنية",
+    "about.pipelineLabel": "المسار الإبداعي",
+    "about.pipelineVal": "الفكرة ← 3D / الذكاء الاصطناعي ← التنفيذ",
+    "about.statusLabel": "الحالة",
+    "about.statusVal": "متاح للمشاريع الجديدة",
+
+    // Software
+    "software.eyebrow": "حزمة الأدوات الإبداعية",
+    "software.title": "برامج التصميم وأدوات الإنتاج",
+    "software.psDesc": "المفاتيح البصرية • معالجة الصور • الدمج الرقمي",
+    "software.aiDesc": "الأنظمة المتجهة • الهوية البصرية • هندسة الخطوط",
+    "software.prDesc": "مونتاج الفيديو • تدرج الألوان الحركي • الإيقاع البصري",
+
+    // Services
+    "services.eyebrow": "التخصصات والخدمات",
+    "services.title": "الخدمات الإبداعية",
+    "services.desc": "حلول بصرية متكاملة تُصاغ بدقة تحريرية، من تأسيس الهوية الاستراتيجية إلى التنفيذ الإبداعي عالي المستوى.",
+    "services.scopeTitle": "نطاق العمل والمخرجات:",
+
+    // Contact
+    "contact.eyebrow": "تواصل معي",
+    "contact.headline": "«لديك فكرة؟ لنصنع معاً شيئاً لا يُنسى.»",
+    "contact.desc": "سواء كنت بصدد إطلاق علامة تجارية جديدة، أو التجهيز لحملة إعلانية، أو إصدار عمل موسيقي، أو استكشاف إدارة فنية بالذكاء الاصطناعي، يسعدني تواصلك.",
+    "contact.inquiryTag": "استفسار مباشر",
+    "contact.copy": "نسخ",
+    "contact.behanceTag": "معرض الأعمال ودراسات الحالة",
+    "contact.behanceDesc": "عروض تفصيلية لتصاميم الهويات، وأدلة العلامات التجارية، واستكشافات بصرية.",
+    "contact.youtubeTag": "القناة الإبداعية",
+    "contact.youtubeDesc": "شروحات تصميم الجرافيك، ودروس إبداعية، ومقاطع من كواليس العمل.",
+    "contact.studioBase": "مقر الاستوديو",
+    "contact.studioLoc": "القاهرة، مصر (UTC+2)",
+    "contact.availTag": "التوفر",
+    "contact.availVal": "استقبال مشاريع للربع الحالي",
+    "contact.formTitle": "أرسل رسالة مباشرة",
+    "contact.formSubtitle": "أدخل تفاصيل موجزة لبدء المحادثة.",
+    "contact.labelName": "الاسم",
+    "contact.placeholderName": "مثال: أحمد علي",
+    "contact.labelEmail": "البريد الإلكتروني",
+    "contact.placeholderEmail": "ahmed@example.com",
+    "contact.labelService": "مجال الاهتمام",
+    "contact.serviceOption0": "الهوية البصرية",
+    "contact.serviceOption1": "الإدارة الفنية",
+    "contact.serviceOption2": "تصميم منصات التواصل",
+    "contact.serviceOption3": "الإعلانات والحملات",
+    "contact.serviceOption4": "تصميم العبوات والتغليف",
+    "contact.serviceOption5": "مرئيات الموسيقى والترفيه",
+    "contact.serviceOption6": "الإنتاج الإبداعي بالذكاء الاصطناعي",
+    "contact.serviceOption7": "مجالات أخرى / متعدد التخصصات",
+    "contact.labelMsg": "نبذة عن المشروع",
+    "contact.placeholderMsg": "أخبرني عن مشروعك، والجدول الزمني، والأهداف المرجوة...",
+    "contact.submitBtn": "إرسال الاستفسار",
+    "contact.toastFill": "يرجى كتابة الاسم والبريد الإلكتروني وتفاصيل المشروع.",
+    "contact.toastSuccess": "شكراً لك! جاري فتح بريدك الإلكتروني لإرسال الاستفسار...",
+    "contact.toastCopied": "تم النسخ إلى الحافظة:",
+
+    // Footer
+    "footer.rights": "جميع الحقوق محفوظة.",
+    "footer.location": "القاهرة، مصر • 30.0444° شمالاً، 31.2357° شرقاً",
+    "footer.backToTop": "العودة للأعلى",
+
+    // Modal
+    "modal.client": "العميل / الجهة",
+    "modal.year": "السنة",
+    "modal.role": "الدور",
+    "modal.scope": "نطاق العمل والمخرجات",
+    "modal.overviewTitle": "نظرة عامة وفكرة المشروع",
+    "modal.directionTitle": "التوجيه الإبداعي والحِرفة الفنية",
+    "modal.showcaseTitle": "معرض المرئيات والمخرجات"
+  }
+};
+
+/* ================= 2. INITIALIZATION ON DOM READY ================= */
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize all interactive modules
   initCustomCursor();
   initCairoClock();
   initNavigation();
   initProjects();
   initServicesAccordion();
-  initClientsSection();
   initContactInteractions();
+  setupCaseStudyModal();
+  initLanguageSwitcher();
+
+  // Load saved language preference or default to English
+  let savedLang = 'en';
+  try {
+    savedLang = localStorage.getItem('portfolio_lang') || 'en';
+  } catch (e) {}
+  setLanguage(savedLang);
 });
 
-/* ---------------- 1. CUSTOM CURSOR ---------------- */
+/* ================= 3. LANGUAGE SWITCHER & i18n ================= */
+function initLanguageSwitcher() {
+  // Desktop Header Switcher Buttons
+  const langButtons = document.querySelectorAll('.lang-btn');
+  langButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetLang = btn.getAttribute('data-lang');
+      if (targetLang && targetLang !== currentLang) {
+        setLanguage(targetLang);
+      }
+    });
+  });
+
+  // Mobile Drawer Switcher Buttons
+  const mobileLangButtons = document.querySelectorAll('.mobile-lang-btn');
+  mobileLangButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetLang = btn.getAttribute('data-lang');
+      if (targetLang && targetLang !== currentLang) {
+        setLanguage(targetLang);
+      }
+    });
+  });
+
+  // Footer Language Toggle Link
+  const footerLangBtn = document.getElementById('footerLangBtn');
+  if (footerLangBtn) {
+    footerLangBtn.addEventListener('click', () => {
+      const targetLang = footerLangBtn.getAttribute('data-lang-target') || (currentLang === 'ar' ? 'en' : 'ar');
+      setLanguage(targetLang);
+    });
+  }
+}
+
+function setLanguage(lang) {
+  if (lang !== 'en' && lang !== 'ar') lang = 'en';
+  currentLang = lang;
+  try {
+    localStorage.setItem('portfolio_lang', lang);
+  } catch (e) {}
+
+  const isAr = (lang === 'ar');
+  document.documentElement.lang = lang;
+  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+
+  // Toggle active class on language buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+  });
+
+  // Footer button label
+  const footerLangBtn = document.getElementById('footerLangBtn');
+  if (footerLangBtn) {
+    if (isAr) {
+      footerLangBtn.textContent = 'English';
+      footerLangBtn.setAttribute('data-lang-target', 'en');
+    } else {
+      footerLangBtn.textContent = 'العربية';
+      footerLangBtn.setAttribute('data-lang-target', 'ar');
+    }
+  }
+
+  // Update page title
+  document.title = isAr 
+    ? "محمد إسماعيل — مصمم جرافيك ومبدع بصري | القاهرة، مصر"
+    : "Mohammed Esmail — Graphic Designer & Visual Creative | Cairo, Egypt";
+
+  // Translate all tagged static elements
+  const dict = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key] !== undefined) {
+      if (dict[key].includes('<') && dict[key].includes('>')) {
+        el.innerHTML = dict[key];
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  // Translate form input placeholders
+  const nameInput = document.getElementById('inquiryName');
+  if (nameInput) nameInput.placeholder = dict["contact.placeholderName"] || "";
+  const emailInput = document.getElementById('inquiryEmail');
+  if (emailInput) emailInput.placeholder = dict["contact.placeholderEmail"] || "";
+  const msgInput = document.getElementById('inquiryMessage');
+  if (msgInput) msgInput.placeholder = dict["contact.placeholderMsg"] || "";
+
+  // Re-render projects grid in active language
+  if (typeof renderProjectsGrid === 'function' && filteredProjects) {
+    renderProjectsGrid(filteredProjects);
+  }
+
+  // Re-render services in active language
+  if (typeof renderServicesAccordion === 'function') {
+    renderServicesAccordion();
+  }
+
+  // Update Cairo clock display
+  updateClockDisplay();
+}
+
+/* ================= 4. CUSTOM CURSOR ================= */
 function initCustomCursor() {
   const dot = document.querySelector('.custom-cursor-dot');
   const outline = document.querySelector('.custom-cursor-outline');
   
   if (!dot || !outline) return;
 
-  // Track cursor position
   window.addEventListener('mousemove', (e) => {
     const { clientX, clientY } = e;
     dot.style.transform = `translate3d(${clientX}px, ${clientY}px, 0)`;
     
-    // Smooth outline follower with requestAnimationFrame or direct transform
     outline.animate({
       transform: `translate3d(${clientX}px, ${clientY}px, 0)`
     }, {
@@ -36,7 +401,6 @@ function initCustomCursor() {
     });
   });
 
-  // Hover states on clickable elements
   const interactiveTargets = document.querySelectorAll('a, button, input, textarea, select, .service-card, .software-tool-card');
   interactiveTargets.forEach(el => {
     el.addEventListener('mouseenter', () => outline.classList.add('hovering'));
@@ -44,40 +408,41 @@ function initCustomCursor() {
   });
 }
 
-/* ---------------- 2. CAIRO LIVE CLOCK ---------------- */
-function initCairoClock() {
+/* ================= 5. CAIRO LIVE CLOCK ================= */
+function updateClockDisplay() {
   const clockElement = document.getElementById('cairoTimeDisplay');
   const heroTimeElement = document.getElementById('heroCairoTime');
 
-  function updateClock() {
-    try {
-      const now = new Date();
-      // Format time in Cairo (UTC+2 or UTC+3 according to daylight savings)
-      const options = {
-        timeZone: 'Africa/Cairo',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false
-      };
-      const cairoTimeStr = new Intl.DateTimeFormat('en-GB', options).format(now);
-      
-      if (clockElement) {
-        clockElement.textContent = `CAIRO ${cairoTimeStr}`;
-      }
-      if (heroTimeElement) {
-        heroTimeElement.textContent = `Cairo, EG • ${cairoTimeStr}`;
-      }
-    } catch (err) {
-      console.warn("Cairo clock fallback:", err);
+  try {
+    const now = new Date();
+    const options = {
+      timeZone: 'Africa/Cairo',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+    const cairoTimeStr = new Intl.DateTimeFormat('en-GB', options).format(now);
+    
+    if (clockElement) {
+      const prefix = currentLang === 'ar' ? 'القاهرة' : 'CAIRO';
+      clockElement.textContent = `${prefix} ${cairoTimeStr}`;
     }
+    if (heroTimeElement) {
+      const city = currentLang === 'ar' ? 'القاهرة، مصر' : 'Cairo, EG';
+      heroTimeElement.textContent = `${city} • ${cairoTimeStr}`;
+    }
+  } catch (err) {
+    console.warn("Cairo clock fallback:", err);
   }
-
-  updateClock();
-  setInterval(updateClock, 1000);
 }
 
-/* ---------------- 3. NAVIGATION & SCROLL ---------------- */
+function initCairoClock() {
+  updateClockDisplay();
+  setInterval(updateClockDisplay, 1000);
+}
+
+/* ================= 6. NAVIGATION & SCROLL ================= */
 function initNavigation() {
   const nav = document.querySelector('.site-nav');
   const mobileToggle = document.querySelector('.mobile-menu-toggle');
@@ -85,7 +450,6 @@ function initNavigation() {
   const drawerLinks = document.querySelectorAll('.mobile-drawer-link');
   const navLinks = document.querySelectorAll('.nav-link');
 
-  // Sticky header class
   window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
       nav.classList.add('scrolled');
@@ -93,13 +457,12 @@ function initNavigation() {
       nav.classList.remove('scrolled');
     }
 
-    // Active link highlighting on scroll
     updateActiveNavLink();
   });
 
   function updateActiveNavLink() {
     const scrollPos = window.scrollY + 200;
-    const sections = ['work', 'about', 'services', 'clients', 'contact'];
+    const sections = ['work', 'about', 'services', 'contact'];
     
     sections.forEach(id => {
       const sec = document.getElementById(id);
@@ -142,28 +505,21 @@ function initNavigation() {
   }
 }
 
-/* ---------------- 4. PROJECTS SHOWCASE & FILTERING ---------------- */
-let currentActiveProjectIndex = 0;
-let filteredProjects = [];
-
+/* ================= 7. PROJECTS SHOWCASE & FILTERING ================= */
 function initProjects() {
   const gridContainer = document.getElementById('projectsGrid');
   const filterButtons = document.querySelectorAll('.filter-btn');
 
   if (!gridContainer || !PORTFOLIO_CONFIG) return;
 
-  // Dynamically update the All Works count badge
   const allCountBadge = document.querySelector('.filter-btn[data-filter="all"] .count');
   if (allCountBadge && PORTFOLIO_CONFIG.projects) {
     allCountBadge.textContent = PORTFOLIO_CONFIG.projects.length;
   }
 
   filteredProjects = [...PORTFOLIO_CONFIG.projects];
-
-  // Render projects continuously without pagination
   renderProjectsGrid(filteredProjects);
 
-  // Category filter handlers
   filterButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       filterButtons.forEach(b => b.classList.remove('active'));
@@ -176,7 +532,6 @@ function initProjects() {
         filteredProjects = PORTFOLIO_CONFIG.projects.filter(p => p.category === category);
       }
 
-      // Smooth re-render with subtle fade
       gridContainer.style.opacity = '0';
       gridContainer.style.transform = 'translateY(12px)';
       setTimeout(() => {
@@ -194,10 +549,13 @@ function renderProjectsGrid(projectsList) {
   
   if (!gridContainer) return;
 
+  const isAr = (currentLang === 'ar');
+  const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.en;
+
   if (projectsList.length === 0) {
     gridContainer.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted);">
-        <p>No projects found in this discipline category.</p>
+        <p>${dict["work.noProjects"]}</p>
       </div>
     `;
     return;
@@ -205,33 +563,31 @@ function renderProjectsGrid(projectsList) {
 
   gridContainer.innerHTML = projectsList.map((project, index) => {
     const behanceUrl = project.behanceUrl || project.link || "https://www.behance.net/muhammedesmail";
-    const categoryLabel = project.categoryLabel || "Selected Work";
-    const shortDesc = project.shortDescription || "";
-    const role = project.role || "Visual Design";
+    
+    // Select Arabic or English fields
+    const title = isAr && project.title_ar ? project.title_ar : project.title;
+    const categoryLabel = isAr && project.categoryLabel_ar ? project.categoryLabel_ar : (project.categoryLabel || "Selected Work");
+    const shortDesc = isAr && project.shortDescription_ar ? project.shortDescription_ar : (project.shortDescription || "");
+    const role = isAr && project.role_ar ? project.role_ar : (project.role || "Visual Design");
+    const ctaText = dict["work.viewBehance"];
 
     return `
-      <a href="${behanceUrl}" target="_blank" rel="noopener noreferrer" class="project-card" data-project-id="${project.id || index}" aria-label="View ${project.title} on Behance">
+      <a href="${behanceUrl}" target="_blank" rel="noopener noreferrer" class="project-card" data-project-id="${project.id || index}" aria-label="${ctaText} - ${title}">
         <div class="project-media-wrap">
-          ${project.isPlaceholder ? `
-            <div class="placeholder-indicator" title="${project.placeholderNote || 'Concept Work'}">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M2 12h20"/></svg>
-              <span>CONCEPT WORK</span>
-            </div>
-          ` : ''}
           <div class="project-category-badge">${categoryLabel}</div>
-          <img src="${project.image}" alt="${project.title} - ${categoryLabel}" class="project-img" loading="lazy" />
+          <img src="${project.image}" alt="${title} - ${categoryLabel}" class="project-img" loading="lazy" />
         </div>
 
         <div class="project-info-wrap">
           <div class="project-title-row">
-            <h3 class="project-title">${project.title}</h3>
+            <h3 class="project-title">${title}</h3>
           </div>
           ${shortDesc ? `<p class="project-desc">${shortDesc}</p>` : ''}
           
           <div class="project-footer-row">
             <span class="project-role-tag">${role}</span>
             <span class="view-case-study-cta">
-              View on Behance
+              ${ctaText}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </span>
           </div>
@@ -240,7 +596,7 @@ function renderProjectsGrid(projectsList) {
     `;
   }).join('');
 
-  // Attach hover cursor listeners to project cards
+  // Hover cursor listeners
   const cards = gridContainer.querySelectorAll('.project-card');
   cards.forEach(card => {
     if (cursorOutline) {
@@ -250,151 +606,36 @@ function renderProjectsGrid(projectsList) {
   });
 }
 
-/* ---------------- 5. CASE STUDY MODAL CONTROLLER ---------------- */
-function setupCaseStudyModal() {
-  const modal = document.getElementById('caseStudyModal');
-  const closeBtn = document.getElementById('closeModalBtn');
-  const prevBtn = document.getElementById('prevProjectBtn');
-  const nextBtn = document.getElementById('nextProjectBtn');
-
-  if (!modal) return;
-
-  // Close handlers
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closeCaseStudyModal);
-  }
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeCaseStudyModal();
-    }
-  });
-
-  // Next / Previous buttons
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (filteredProjects.length === 0) return;
-      currentActiveProjectIndex = (currentActiveProjectIndex - 1 + filteredProjects.length) % filteredProjects.length;
-      populateModalContent(filteredProjects[currentActiveProjectIndex]);
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (filteredProjects.length === 0) return;
-      currentActiveProjectIndex = (currentActiveProjectIndex + 1) % filteredProjects.length;
-      populateModalContent(filteredProjects[currentActiveProjectIndex]);
-    });
-  }
-
-  // Keyboard navigation (Esc, ArrowLeft, ArrowRight)
-  window.addEventListener('keydown', (e) => {
-    if (!modal.classList.contains('open')) return;
-
-    if (e.key === 'Escape') {
-      closeCaseStudyModal();
-    } else if (e.key === 'ArrowLeft') {
-      if (prevBtn) prevBtn.click();
-    } else if (e.key === 'ArrowRight') {
-      if (nextBtn) nextBtn.click();
-    }
-  });
-}
-
-function openCaseStudyModal(index) {
-  const modal = document.getElementById('caseStudyModal');
-  if (!modal || !filteredProjects[index]) return;
-
-  currentActiveProjectIndex = index;
-  populateModalContent(filteredProjects[index]);
-
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCaseStudyModal() {
-  const modal = document.getElementById('caseStudyModal');
-  if (!modal) return;
-
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-}
-
-function populateModalContent(project) {
-  // Title & Category
-  document.getElementById('modalProjectTitle').textContent = project.title;
-  document.getElementById('modalProjectSubtitle').textContent = project.subtitle || project.categoryLabel;
-  document.getElementById('modalCategoryBadge').textContent = project.categoryLabel;
-
-  // Hero artwork
-  const heroImg = document.getElementById('modalHeroImg');
-  heroImg.src = project.image;
-  heroImg.alt = project.title;
-
-  // Placeholder Notice in modal
-  const placeholderNote = document.getElementById('modalPlaceholderBanner');
-  if (placeholderNote) {
-    if (project.isPlaceholder) {
-      placeholderNote.style.display = 'flex';
-      document.getElementById('modalPlaceholderText').textContent = project.placeholderNote;
-    } else {
-      placeholderNote.style.display = 'none';
-    }
-  }
-
-  // Meta details
-  document.getElementById('modalClient').textContent = project.client || '[Commission Placeholder]';
-  document.getElementById('modalYear').textContent = project.year;
-  document.getElementById('modalRole').textContent = project.role;
-
-  // Deliverables pills
-  const deliverablesContainer = document.getElementById('modalDeliverablesList');
-  if (deliverablesContainer && project.deliverables) {
-    deliverablesContainer.innerHTML = project.deliverables.map(d => `
-      <span class="deliverable-pill">${d}</span>
-    `).join('');
-  }
-
-  // Story Blocks
-  document.getElementById('modalOverviewText').textContent = project.overview || project.shortDescription;
-  document.getElementById('modalDirectionText').textContent = project.creativeDirection || "Crafted with meticulous attention to typography, spatial rhythm, and tactile aesthetic balance.";
-
-  // Gallery Showcase
-  const galleryContainer = document.getElementById('modalGalleryShowcase');
-  if (galleryContainer && project.gallery) {
-    galleryContainer.innerHTML = project.gallery.map(item => `
-      <div class="gallery-item">
-        <img src="${item.src}" alt="${item.caption}" loading="lazy" />
-        <div class="gallery-caption">${item.caption}</div>
-      </div>
-    `).join('');
-  }
-
-  // Reset modal scroll to top
-  const scrollBody = document.querySelector('.modal-scroll-body');
-  if (scrollBody) scrollBody.scrollTop = 0;
-}
-
-/* ---------------- 6. SERVICES ACCORDION ---------------- */
+/* ================= 8. SERVICES ACCORDION ================= */
 function initServicesAccordion() {
+  renderServicesAccordion();
+}
+
+function renderServicesAccordion() {
   const servicesContainer = document.getElementById('servicesList');
   if (!servicesContainer || !PORTFOLIO_CONFIG) return;
 
+  const isAr = (currentLang === 'ar');
+  const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.en;
+
   servicesContainer.innerHTML = PORTFOLIO_CONFIG.services.map((service, idx) => {
     const isFirst = idx === 0;
+    const name = isAr && service.name_ar ? service.name_ar : service.name;
+    const tagline = isAr && service.tagline_ar ? service.tagline_ar : service.tagline;
+    const description = isAr && service.description_ar ? service.description_ar : service.description;
+    const deliverables = isAr && service.deliverables_ar ? service.deliverables_ar : service.deliverables;
+
     return `
       <div class="service-card" data-service-id="${service.id}">
         <div class="service-main-row" role="button" tabindex="0" aria-expanded="${isFirst}">
           <div class="service-left-col">
             <span class="service-index">${service.id}</span>
             <div class="service-title-block">
-              <h3 class="service-title">${service.name}</h3>
-              <p class="service-tagline">${service.tagline}</p>
+              <h3 class="service-title">${name}</h3>
+              <p class="service-tagline">${tagline}</p>
             </div>
           </div>
-          <button class="service-toggle-btn" aria-label="Toggle details for ${service.name}">
+          <button class="service-toggle-btn" aria-label="Toggle details for ${name}">
             <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(${isFirst ? '180deg' : '0deg'}); transition: transform 0.3s ease;">
               <path d="M6 9l6 6 6-6"/>
             </svg>
@@ -402,11 +643,11 @@ function initServicesAccordion() {
         </div>
 
         <div class="service-details" style="display: ${isFirst ? 'grid' : 'none'};">
-          <p class="service-desc-text">${service.description}</p>
+          <p class="service-desc-text">${description}</p>
           <div class="service-deliverables-box">
-            <span class="service-deliverables-title">Scope & Deliverables:</span>
+            <span class="service-deliverables-title">${dict["services.scopeTitle"]}</span>
             <ul class="deliverables-bullet-list">
-              ${service.deliverables.map(d => `<li>${d}</li>`).join('')}
+              ${deliverables.map(d => `<li>${d}</li>`).join('')}
             </ul>
           </div>
         </div>
@@ -444,59 +685,158 @@ function initServicesAccordion() {
   });
 }
 
-/* ---------------- 7. CLIENTS & COLLABORATIONS SECTION ---------------- */
-function initClientsSection() {
-  const clientsGrid = document.getElementById('clientsGrid');
-  if (!clientsGrid || !PORTFOLIO_CONFIG) return;
+/* ================= 9. CASE STUDY MODAL ================= */
+function setupCaseStudyModal() {
+  const modal = document.getElementById('caseStudyModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const prevBtn = document.getElementById('prevProjectBtn');
+  const nextBtn = document.getElementById('nextProjectBtn');
 
-  clientsGrid.innerHTML = PORTFOLIO_CONFIG.clientSlots.map(slot => `
-    <div class="client-slot-card">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(200, 170, 122, 0.4)" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <path d="M3 9h18M9 21V9"/>
-      </svg>
-      <span class="client-slot-label">${slot.label}</span>
-      <span class="client-slot-category">${slot.category}</span>
-      <span class="client-replace-note">Add your client logo in projects-data.js</span>
-    </div>
-  `).join('');
+  if (!modal) return;
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeCaseStudyModal);
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeCaseStudyModal();
+    }
+  });
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      if (filteredProjects.length === 0) return;
+      currentActiveProjectIndex = (currentActiveProjectIndex - 1 + filteredProjects.length) % filteredProjects.length;
+      populateModalContent(filteredProjects[currentActiveProjectIndex]);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      if (filteredProjects.length === 0) return;
+      currentActiveProjectIndex = (currentActiveProjectIndex + 1) % filteredProjects.length;
+      populateModalContent(filteredProjects[currentActiveProjectIndex]);
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('open')) return;
+
+    if (e.key === 'Escape') {
+      closeCaseStudyModal();
+    } else if (e.key === 'ArrowLeft') {
+      if (prevBtn) prevBtn.click();
+    } else if (e.key === 'ArrowRight') {
+      if (nextBtn) nextBtn.click();
+    }
+  });
 }
 
-/* ---------------- 8. CONTACT & FORM INTERACTIONS ---------------- */
+function openCaseStudyModal(index) {
+  const modal = document.getElementById('caseStudyModal');
+  if (!modal || !filteredProjects[index]) return;
+
+  currentActiveProjectIndex = index;
+  populateModalContent(filteredProjects[index]);
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCaseStudyModal() {
+  const modal = document.getElementById('caseStudyModal');
+  if (!modal) return;
+
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+function populateModalContent(project) {
+  const isAr = (currentLang === 'ar');
+
+  const title = isAr && project.title_ar ? project.title_ar : project.title;
+  const subtitle = isAr && project.subtitle_ar ? project.subtitle_ar : (project.subtitle || project.categoryLabel);
+  const categoryLabel = isAr && project.categoryLabel_ar ? project.categoryLabel_ar : project.categoryLabel;
+  const client = isAr && project.client_ar ? project.client_ar : (project.client || '[Commission]');
+  const role = isAr && project.role_ar ? project.role_ar : project.role;
+  const deliverables = isAr && project.deliverables_ar ? project.deliverables_ar : project.deliverables;
+  const overview = isAr && project.overview_ar ? project.overview_ar : (project.overview || project.shortDescription);
+  const direction = isAr && project.creativeDirection_ar ? project.creativeDirection_ar : project.creativeDirection;
+
+  document.getElementById('modalProjectTitle').textContent = title;
+  document.getElementById('modalCategoryBadge').textContent = categoryLabel;
+
+  const heroImg = document.getElementById('modalHeroImg');
+  heroImg.src = project.image;
+  heroImg.alt = title;
+
+  document.getElementById('modalClient').textContent = client;
+  document.getElementById('modalYear').textContent = project.year;
+  document.getElementById('modalRole').textContent = role;
+
+  const deliverablesContainer = document.getElementById('modalDeliverablesList');
+  if (deliverablesContainer && deliverables) {
+    deliverablesContainer.innerHTML = deliverables.map(d => `
+      <span class="deliverable-pill">${d}</span>
+    `).join('');
+  }
+
+  document.getElementById('modalOverviewText').textContent = overview;
+  document.getElementById('modalDirectionText').textContent = direction || "";
+
+  const galleryContainer = document.getElementById('modalGalleryShowcase');
+  if (galleryContainer && project.gallery) {
+    galleryContainer.innerHTML = project.gallery.map(item => {
+      const caption = isAr && item.caption_ar ? item.caption_ar : item.caption;
+      return `
+        <div class="gallery-item">
+          <img src="${item.src}" alt="${caption}" loading="lazy" />
+          <div class="gallery-caption">${caption}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const scrollBody = document.querySelector('.modal-scroll-body');
+  if (scrollBody) scrollBody.scrollTop = 0;
+}
+
+/* ================= 10. CONTACT INTERACTIONS ================= */
 function initContactInteractions() {
-  // Copy Email button
   const copyBtn = document.getElementById('copyEmailBtn');
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
       const email = PORTFOLIO_CONFIG.designer.email;
+      const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.en;
       navigator.clipboard.writeText(email).then(() => {
-        showToast(`Copied to clipboard: ${email}`);
+        showToast(`${dict["contact.toastCopied"]} ${email}`);
       }).catch(() => {
         showToast(`Email: ${email}`);
       });
     });
   }
 
-  // Inquiry Form Handler
   const inquiryForm = document.getElementById('inquiryForm');
   if (inquiryForm) {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
+      const dict = UI_TRANSLATIONS[currentLang] || UI_TRANSLATIONS.en;
       const name = document.getElementById('inquiryName').value.trim();
       const email = document.getElementById('inquiryEmail').value.trim();
       const service = document.getElementById('inquiryService').value;
       const message = document.getElementById('inquiryMessage').value.trim();
 
       if (!name || !email || !message) {
-        showToast('Please fill in your name, email, and message.');
+        showToast(dict["contact.toastFill"]);
         return;
       }
 
-      // Show friendly confirmation
-      showToast('Thank you! Inquiry prepared. Opening your email client...');
+      showToast(dict["contact.toastSuccess"]);
       
-      // Construct mailto link
       const subject = encodeURIComponent(`Project Inquiry: ${service} — ${name}`);
       const body = encodeURIComponent(`Hello Mohammed,\n\nName: ${name}\nEmail: ${email}\nService: ${service}\n\nProject Details:\n${message}\n\nBest regards,\n${name}`);
       
@@ -507,7 +847,7 @@ function initContactInteractions() {
   }
 }
 
-/* ---------------- 10. TOAST NOTIFICATIONS ---------------- */
+/* ================= 11. TOAST NOTIFICATIONS ================= */
 function showToast(message) {
   let toast = document.querySelector('.toast-notice');
   if (!toast) {
