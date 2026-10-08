@@ -9,7 +9,7 @@
  *  - POST /api/admin/upload
  */
 
-const DEFAULT_ADMIN_PASSWORD = 'mohammed@admin2026';
+const DEFAULT_ADMIN_PASSWORD = 'KAIRO-ADMIN-2026-CHANGE-ME';
 
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {

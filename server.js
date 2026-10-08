@@ -22,7 +22,7 @@ const UPLOADS_DIR = path.join(BASE_DIR, 'assets', 'images');
 
 // Admin Authentication Setup
 // Default dev password if not provided in environment variable
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'mohammed@admin2026';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'KAIRO-ADMIN-2026-CHANGE-ME';
 
 // In-memory active session tokens: token -> { createdAt, expiresAt }
 const activeSessions = new Map();
@@ -354,7 +354,7 @@ server.listen(PORT, () => {
   console.log(`\n======================================================`);
   console.log(`  MOHAMMED ESMAIL — PORTFOLIO RUNNING`);
   console.log(`  Local URL:   http://localhost:${PORT}`);
-  console.log(`  Admin Pass:  ${process.env.ADMIN_PASSWORD ? '[Configured via env]' : 'mohammed@admin2026'}`);
+  console.log(`  Admin Pass:  ${process.env.ADMIN_PASSWORD ? '[Configured via env]' : 'KAIRO-ADMIN-2026-CHANGE-ME'}`);
   console.log(`  Press Ctrl+C to terminate the server`);
   console.log(`======================================================\n`);
 });
