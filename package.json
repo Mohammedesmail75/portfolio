@@ -1,0 +1,12 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mohammed Esmail Portfolio & Visual Design Showcase",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Static build complete'",
+    "deploy": "wrangler pages deploy .",
+    "pages:deploy": "wrangler pages deploy ."
+  }
+}
