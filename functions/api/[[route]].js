@@ -46,7 +46,7 @@ async function verifyToken(token, env) {
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
-  const path = url.pathname;
+  const path = url.pathname.replace(/\/+$/, '') || '/';
   const method = request.method;
 
   if (method === 'OPTIONS') {
@@ -116,12 +116,15 @@ export async function onRequest(context) {
       const kvData = await env.PORTFOLIO_KV.get('portfolio_data', { type: 'json' });
       if (kvData) return jsonResponse(kvData);
     }
-    // Fallback to static asset fetch
-    const assetUrl = new URL('/data/portfolio-data.json', url.origin);
-    const assetRes = await fetch(assetUrl.toString());
-    if (assetRes.ok) {
-      const data = await assetRes.json();
-      return jsonResponse(data);
+    // Fallback to static asset fetch via ASSETS binding
+    if (env && env.ASSETS) {
+      try {
+        const assetUrl = new URL('/data/portfolio-data.json', request.url);
+        const assetRes = await env.ASSETS.fetch(new Request(assetUrl.toString()));
+        if (assetRes.ok) return assetRes;
+      } catch (e) {
+        console.warn('ASSETS fetch error:', e);
+      }
     }
     return jsonResponse({ success: false, error: 'Data not found' }, 404);
   }

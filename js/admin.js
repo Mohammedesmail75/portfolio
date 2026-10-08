@@ -132,20 +132,41 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ password: pass })
         });
-        const data = await res.json();
 
-        if (res.ok && data.success && data.token) {
+        let data = null;
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          try {
+            data = await res.json();
+          } catch (_) {
+            data = null;
+          }
+        }
+
+        if (res.ok && data && data.success && data.token) {
           adminToken = data.token;
           sessionStorage.setItem('portfolio_admin_token', adminToken);
           await openAdminDashboard();
+        } else if (res.status === 401) {
+          errorBox.textContent = (data && data.error) ? data.error : 'Invalid credentials. Access denied.';
+          errorBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
+        } else if (res.status === 404) {
+          errorBox.textContent = 'API endpoint not found (HTTP 404). Cloudflare Pages Functions may not be deployed for /api.';
+          errorBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
         } else {
-          errorBox.textContent = data.error || 'Invalid credentials. Access denied.';
+          const msg = (data && data.error) ? data.error : `Server returned HTTP ${res.status}. Please check server status.`;
+          errorBox.textContent = msg;
           errorBox.style.display = 'block';
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
         }
       } catch (err) {
-        errorBox.textContent = 'Connection error. Please check server status.';
+        console.error('[Admin Login Fetch Error]', err);
+        errorBox.textContent = 'Connection error. Please check network or server status.';
         errorBox.style.display = 'block';
         submitBtn.disabled = false;
         submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
