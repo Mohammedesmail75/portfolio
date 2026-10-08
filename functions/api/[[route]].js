@@ -33,13 +33,14 @@ function generateToken() {
 async function verifyToken(token, env) {
   if (!token) return false;
   if (env && env.PORTFOLIO_KV) {
-    const session = await env.PORTFOLIO_KV.get(`session:${token}`, { type: 'json' });
-    if (!session) return false;
-    if (Date.now() > session.expiresAt) return false;
-    return true;
+    try {
+      const session = await env.PORTFOLIO_KV.get(`session:${token}`, { type: 'json' });
+      if (!session) return false;
+      if (Date.now() > session.expiresAt) return false;
+      return true;
+    } catch (_) {}
   }
   // Fallback signature check if KV not bound
-  // Token prefix test
   return token.length === 64;
 }
 
@@ -49,6 +50,7 @@ export async function onRequest(context) {
   const path = url.pathname.replace(/\/+$/, '') || '/';
   const method = request.method;
 
+  // Handle CORS preflight
   if (method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
@@ -60,20 +62,39 @@ export async function onRequest(context) {
     });
   }
 
+  // Normalize sub-route parameter from context.params.route (e.g. ['auth', 'login'] or 'auth/login')
+  const routeParam = context.params && context.params.route;
+  const subRoute = Array.isArray(routeParam)
+    ? routeParam.join('/')
+    : (typeof routeParam === 'string' ? routeParam.replace(/^\/+|\/+$/g, '') : '');
+
   const ADMIN_PASSWORD = (env && env.ADMIN_PASSWORD) ? env.ADMIN_PASSWORD : DEFAULT_ADMIN_PASSWORD;
 
+  // Helper matcher to match both full path and sub-route
+  const matches = (target) => {
+    const fullTarget = '/api/' + target;
+    const shortTarget = '/' + target;
+    return path === fullTarget ||
+           path === shortTarget ||
+           path.endsWith(fullTarget) ||
+           path.endsWith(shortTarget) ||
+           subRoute === target;
+  };
+
   // 1. POST /api/auth/login
-  if (path === '/api/auth/login' && method === 'POST') {
+  if (matches('auth/login') && method === 'POST') {
     try {
       const body = await request.json();
       const password = String(body.password || '');
       if (password === ADMIN_PASSWORD) {
         const token = generateToken();
         if (env && env.PORTFOLIO_KV) {
-          await env.PORTFOLIO_KV.put(`session:${token}`, JSON.stringify({
-            createdAt: Date.now(),
-            expiresAt: Date.now() + (24 * 60 * 60 * 1000)
-          }), { expirationTtl: 86400 });
+          try {
+            await env.PORTFOLIO_KV.put(`session:${token}`, JSON.stringify({
+              createdAt: Date.now(),
+              expiresAt: Date.now() + (24 * 60 * 60 * 1000)
+            }), { expirationTtl: 86400 });
+          } catch (_) {}
         }
         return jsonResponse({
           success: true,
@@ -85,12 +106,12 @@ export async function onRequest(context) {
         return jsonResponse({ success: false, error: 'Invalid password' }, 401);
       }
     } catch (err) {
-      return jsonResponse({ success: false, error: 'Bad Request' }, 400);
+      return jsonResponse({ success: false, error: 'Bad Request: ' + (err.message || 'Invalid JSON') }, 400);
     }
   }
 
   // 2. GET /api/auth/check
-  if (path === '/api/auth/check' && method === 'GET') {
+  if (matches('auth/check') && method === 'GET') {
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
     const isValid = await verifyToken(token, env);
@@ -101,20 +122,24 @@ export async function onRequest(context) {
   }
 
   // 3. POST /api/auth/logout
-  if (path === '/api/auth/logout' && method === 'POST') {
+  if (matches('auth/logout') && method === 'POST') {
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
     if (token && env && env.PORTFOLIO_KV) {
-      await env.PORTFOLIO_KV.delete(`session:${token}`);
+      try {
+        await env.PORTFOLIO_KV.delete(`session:${token}`);
+      } catch (_) {}
     }
     return jsonResponse({ success: true, message: 'Logged out successfully' });
   }
 
   // 4. GET /api/portfolio-data
-  if (path === '/api/portfolio-data' && method === 'GET') {
+  if (matches('portfolio-data') && method === 'GET') {
     if (env && env.PORTFOLIO_KV) {
-      const kvData = await env.PORTFOLIO_KV.get('portfolio_data', { type: 'json' });
-      if (kvData) return jsonResponse(kvData);
+      try {
+        const kvData = await env.PORTFOLIO_KV.get('portfolio_data', { type: 'json' });
+        if (kvData) return jsonResponse(kvData);
+      } catch (_) {}
     }
     // Fallback to static asset fetch via ASSETS binding
     if (env && env.ASSETS) {
@@ -130,7 +155,7 @@ export async function onRequest(context) {
   }
 
   // 5. POST /api/admin/save
-  if (path === '/api/admin/save' && method === 'POST') {
+  if (matches('admin/save') && method === 'POST') {
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
     const isValid = await verifyToken(token, env);
@@ -143,7 +168,9 @@ export async function onRequest(context) {
       data.lastUpdated = new Date().toISOString();
 
       if (env && env.PORTFOLIO_KV) {
-        await env.PORTFOLIO_KV.put('portfolio_data', JSON.stringify(data));
+        try {
+          await env.PORTFOLIO_KV.put('portfolio_data', JSON.stringify(data));
+        } catch (_) {}
       }
 
       return jsonResponse({
@@ -157,7 +184,7 @@ export async function onRequest(context) {
   }
 
   // 6. POST /api/admin/upload
-  if (path === '/api/admin/upload' && method === 'POST') {
+  if (matches('admin/upload') && method === 'POST') {
     const authHeader = request.headers.get('Authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
     const isValid = await verifyToken(token, env);
@@ -181,5 +208,5 @@ export async function onRequest(context) {
     }
   }
 
-  return jsonResponse({ error: 'Endpoint not found' }, 404);
+  return jsonResponse({ error: 'Endpoint not found', path, subRoute }, 404);
 }

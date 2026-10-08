@@ -153,7 +153,7 @@
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
         } else if (res.status === 404) {
-          errorBox.textContent = 'API endpoint not found (HTTP 404). Cloudflare Pages Functions may not be deployed for /api.';
+          errorBox.textContent = (data && data.error) ? data.error : 'API endpoint not found (HTTP 404). Cloudflare Pages Functions may not be deployed for /api.';
           errorBox.style.display = 'block';
           submitBtn.disabled = false;
           submitBtn.innerHTML = '<span>Unlock Dashboard</span>';
